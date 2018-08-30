@@ -4,15 +4,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <name>ls_01</name>
-    <description>ls_example</description>
-
-    <developers>
-        <developer>
-            <name>Sanefox</name>
-        </developer>
-    </developers>
-
     <groupId>ru.sanefox</groupId>
     <artifactId>ls_01</artifactId>
     <version>1.0-SNAPSHOT</version>
@@ -22,7 +13,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <com.google.guava.version>23.0</com.google.guava.version>
-        <my.variable>83</my.variable>
+        <ru.sanefox.proguard-maven-plugin>2.0.13</ru.sanefox.proguard-maven-plugin>
     </properties>
 
     <dependencies>
@@ -71,6 +62,33 @@
                             <mainClass>ru.sanefox.Main</mainClass>
                         </manifest>
                     </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.github.wvengen</groupId>
+                <artifactId>proguard-maven-plugin</artifactId>
+                <version>${ru.sanefox.proguard-maven-plugin}</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>proguard</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <options>
+                        <option>-dontwarn</option>
+                        <option>-keep public class ru.sanefox.**</option>
+                    </options>
+                    <obfuscate>true</obfuscate>
+                    <injar>${project.build.finalName}.jar</injar>
+                    <outjar>${project.build.finalName}-small.jar</outjar>
+                    <outputDirectory>${project.build.directory}</outputDirectory>
+                    <proguardInclude>${basedir}/config.pro</proguardInclude>
+                    <libs>
+                        <lib>${java.home}/lib/rt.jar</lib>
+                    </libs>
                 </configuration>
             </plugin>
         </plugins>
